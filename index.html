@@ -337,7 +337,189 @@
         <b>
             <font size="+1">What are the children?</font>
         </b>
-        <h1> Hello World!!!</h1>
+        <p>
+            One of the things that simplifies the above binary tree search is that, at each choice point, you can ignore all the previous 
+            choices. Previous choices don't give you any information about what you should do next; as far as you know, both the left and 
+            the right child are possible solutions. In many problems, however, you may be able to eliminate children immediately, without 
+            recursion.
+        </p>
+        <p>Consider, for example, the problem of four-coloring a map. It is a theorem of mathematics that any map on a plane, no 
+            matter how convoluted the countries are, can be colored with at most four colors, so that no two countries that share a border are 
+            the same color.
+        </p>
+        <p>To color a map, you choose a color for the first country, then a color for the second country, and so on, until all countries 
+            are colored. There are two ways to do this:
+        </p>
+        <ul>
+            <li>
+                <b>Method 1.</b> Try each of the four possible colors, and recur. When you run out of countries, check whether you are at a goal node.
+            </li>
+            <li>
+                <b>Method 2.</b> Try only those colors that have not already been used for an adjacent country, and recur. If and when you run out of countries, 
+                you have successfully colored the map.
+            </li>
+        </ul>
+        <p>Let's apply each of these two methods to the problem of coloring a checkerboard. This should be easily solvable; after all, a checkerboard only 
+            needs two colors.</p>
+        <p>In both methods, the colors are represented by integers, from RED=1 to BLUE=4. We define the following helper methods. The helper method code 
+            isn't displayed here because it's not important for understanding the method that does the backtracking.</p>
+        <dl>
+            <dt>
+                <font size="5"><code>boolean mapIsOK()</code></font>
+            </dt>
+            <dd>
+                Used by method 1 to check (at a leaf node) whether the entire map is colored correctly.
+            </dd>
+            <br>
+            <dt>
+                <font size="5"><code>boolean okToColor(int row, int column, int color)</code></font>
+            </dt>
+            <dd>
+                Used by method 2 to check, at every node, whether there is an adjacent node already colored with the given color.
+            </dd>
+            <br>
+            <dt>
+                <font size="5"><code>int[] nextRowAndColumn(int row, int column)</code></font>
+            </dt>
+            <dd>
+                Used by both methods to find the next "country" (actually, the row and column of the next square on the checkerboard).
+            </dd>
+        </dl>
+        <p>Here's the code for method 1:</p>
+        <pre><font size="+1">   boolean explore1(int row, int column, int color) {
+        if (row >= NUM_ROWS) <b>return mapIsOK();</b>
+            map[row][column] = color;
+            for (int nextColor = RED; nextColor <= BLUE; nextColor++) {
+            int[] next = nextRowAndColumn(row, column);
+                if (explore1(next[0], next[1], nextColor)) return true;
+        }
+            return false;
+    }
+                
+        </font></pre>
+        <p>And here's the code for method 2:</p>
+        <pre><font size="+1">   boolean explore2(int row, int column, int color) {
+        if (row >= NUM_ROWS) return true;
+        if (okToColor(row, column, color)) {
+            map[row][column] = color;
+            for (int nextColor = RED; nextColor <= BLUE; nextColor++) {
+                int[] next = nextRowAndColumn(row, column);
+                if (explore2(next[0], next[1], nextColor)) return true;
+            }
+        }
+        return false;
+    }            
+    </font></pre>
+    <p>Those appear pretty similar, and you might think they are equally good. However, the timing information suggests otherwise:</p>
+    <table border="1" align="center" calspan="2">
+        <tr bgcolor="#BFBCB9">
+            <td></td>
+            <td>2 by 3 map</td>
+            <td>3 by 3 map</td>
+            <td>3 by 4 map</td>
+        </tr>
+        <tr>
+            <td bgcolor="#BFBCB9">Method 1:</td>
+            <td>60 ms.</td>
+            <td>940 ms.</td>
+            <td>60530 ms. (1 minute)</td>
+        </tr>
+        <tr>
+            <td bgcolor="#BFBCB9">Method 2:</td>
+            <td>0 ms.</td>
+            <td>0 ms.</td>
+            <td>60 ms.</td>
+        </tr>
+    </table>
+    <p>The zeros in the above table indicate times too short to measure (less than 1 millisecond). Why this huge difference? Either of these methods 
+        could have exponential growth. Eliminating a node automatically eliminates all of its descendents, and this will often prevent exponential growth. 
+        Conversely, by waiting to check until a leaf node is reached, exponential growth is practically guaranteed. If there is any way to eliminate 
+        children (reduce the set of choices), do so!
+    </p>
+    </section>
+
+    <section>
+        <b>
+            <font size="+1">Debugging techniques</font>
+        </b>
+        <p>
+            Often our first try at a program doesn't work, and we need to debug it. Debuggers are helpful, but sometimes we need to fall back on inserting 
+            print statements. There are some simple tricks to making effective use of print statements. These tricks can be applied to any program, but are
+            especially useful when you are trying to debug recursive routines.
+        </p>
+        <p>
+            Trick #1: Indent when you print method entries and exits. Often, the best debugging technique is to print every method call and return (or at least 
+            the most important ones). You probably want to print, for each method, what parameters it came in with, and what value it leaves with. However, if 
+            you just print a long list of these, it's hard to match up method exits with their corresponding entries. Indenting to show the level of nesting can help.
+        </p>
+        <p>
+            Trick #2: Use specialized print methods for debugging. Don't clutter up your actual code more than you must. Also, remember that code inserted for 
+            debugging purposes can itself contain bugs, or (in the worst case) can affect the results, so be very careful with it.
+        </p>
+        <p>
+            Here's our debugging code. For this trivial program, there's almost more debugging code than actual code, but in larger programs the proportions will be better.
+        </p>
+        <pre><font size="4">    static String indent = "";
+
+    static String name(BinaryTree node) {
+        if (node == null) return null;
+        else return node.name;
+    }
+
+    static void enter(BinaryTree node) {
+        System.out.println(indent + "Entering solvable(" + name(node) + ")");
+        indent = indent + "|  ";
+    }
+
+    static boolean yes(BinaryTree node) {
+        indent = indent.substring(3);
+        System.out.println(indent + "solvable(" + name(node) + ") returns true");
+        return true;
+    }
+
+    static boolean no(BinaryTree node) {
+        indent = indent.substring(3);
+        System.out.println(indent + "solvable(" + name(node) + ") returns false");
+        return false;
+}   
+        </font></pre>
+        <p>
+            To use this code, we modify solvable as follows:
+        </p>
+        <pre><font size="4">    static boolean solvable(BinaryTree node) {
+        enter(node);
+        if (node == null) return no(node);
+        if (node.isGoalNode) return yes(node);
+        if (solvable(node.leftChild)) return yes(node);
+        if (solvable(node.rightChild)) return yes(node);
+        return no(node);
+    }  
+        </font></pre>
+        <p>And we get these results:</p>
+        <b>
+            <pre><font size="4" color="#000000">    Entering solvable(Root)
+    |  Entering solvable(A)
+    |  |  Entering solvable(C)
+    |  |  |  Entering solvable(null)
+    |  |  |  solvable(null) returns false
+    |  |  |  Entering solvable(null)
+    |  |  |  solvable(null) returns false
+    |  |  solvable(C) returns false
+    |  |  Entering solvable(D)
+    |  |  |  Entering solvable(null)
+    |  |  |  solvable(null) returns false
+    |  |  |  Entering solvable(null)
+    |  |  |  solvable(null) returns false
+    |  |  solvable(D) returns false
+    |  solvable(A) returns false
+    |  Entering solvable(B)
+    |  |  Entering solvable(E)
+    |  |  solvable(E) returns true
+    |  solvable(B) returns true
+    solvable(Root) returns true
+    true
+            </font></pre>
+        </b>
     </section>
 </body>
 </html>
