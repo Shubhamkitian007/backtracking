@@ -200,12 +200,14 @@
     </p>
     <p>
         To keep the program clean, therefore, tests like this should be buried in methods. In a chess game, for example, you could test 
-        whether a node is a leaf by writing a <b><code>gameOver</code></b> method (or you could even call it <b><code>isLeaf</code></b>). 
-        This method would encapsulate all the ugly details of figuring out whether any possible moves remain.
+        whether a node is a leaf by writing a <code><font size="5" color="#601B1B">gameOver</font></code> method (or you could even call it 
+        <code><font size="5" color="#601B1B">isLeaf</font></code>. This method would encapsulate all the ugly details of figuring out whether 
+        any possible moves remain.
     </p>
     <P>
         Notice that the backtracking altorithms require us to keep track, for each node on the current path, which of its children have been
-         tried already (so we don't have to try them again). In the above code we made this look simple, by just saying for each child c of n. 
+         tried already (so we don't have to try them again). In the above code we made this look simple, by just saying 
+         <code><font size="5" color="#601B1B">for each child c of n.</font></code> 
          In reality, it may be difficult to figure out what the possible children are, and there may be no obvious way to step through them. 
          In chess, for example, a node can represent one arrangement of pieces on a chessboard, and each child of that node can represent the 
          arrangement after some piece has made a legal move. How do you find these children, and how do you keep track of which ones you've 
@@ -218,15 +220,15 @@
         require quite a lot of additional work.
     </p>
     <p>
-        There is an easier way to keep track of which children have been tried, if you can define an ordering on the children. If there is an 
+        There is an easier way to keep track of which children have been tried, <b>if</b> you can define an ordering on the children. If there is an 
         ordering, and you know which child you just tried, you can determine which child to try next.
     </p>
     <p>
-        For example, you might be able to number the children 1 through n, and try them in numerical order. Then, if you have just tried child k, 
-        you know that you have already tried children 1 through k-1, and you have not yet tried children k+1 through n. Or, if you are trying to 
-        color a map with just four colors, you can always try red first, then yellow, then green, then blue. If child yellow fails, you know to 
-        try child green next. If you are searching a maze, you can try choices in the order left, straight, right 
-        (or perhaps north, east, south, west).
+        For example, you might be able to number the children <code><font size="4" color="#601B1B">1</font></code> through <code><font size="5" color="#601B1B">n</font></code>, 
+        and try them in numerical order. Then, if you have just tried child k, you know that you have already tried children <code><font size="4" color="#601B1B">1</font></code>
+        through <code><font size="4" color="#601B1B">k-1</font></code>, and you have not yet tried children 
+        <code><font size="5" color="#601B1B">k+1</font></code> through <code><font size="5" color="#601B1B">n.</font></code> Or, if you are trying to color a map with just four colors, you can always try red first, then yellow, then green, then blue. If child yellow fails, 
+        you know to try child green next. If you are searching a maze, you can try choices in the order left, straight, right (or perhaps north, east, south, west).
     </p>
     <p>
         It isn't always easy to find a simple way to order the children of a node. In the chess game example, you might number your pieces 
@@ -361,8 +363,9 @@
         </ul>
         <p>Let's apply each of these two methods to the problem of coloring a checkerboard. This should be easily solvable; after all, a checkerboard only 
             needs two colors.</p>
-        <p>In both methods, the colors are represented by integers, from RED=1 to BLUE=4. We define the following helper methods. The helper method code 
-            isn't displayed here because it's not important for understanding the method that does the backtracking.</p>
+        <p>In both methods, the colors are represented by integers, from <code><font size="4">RED=1</font></code> to <code><font size="4">BLUE=4.</font></code> 
+            We define the following helper methods. The helper method code isn't displayed here because it's not important for understanding the method that does 
+            the backtracking.</p>
         <dl>
             <dt>
                 <font size="5"><code>boolean mapIsOK()</code></font>
@@ -433,8 +436,8 @@
     </table>
     <p>The zeros in the above table indicate times too short to measure (less than 1 millisecond). Why this huge difference? Either of these methods 
         could have exponential growth. Eliminating a node automatically eliminates all of its descendents, and this will often prevent exponential growth. 
-        Conversely, by waiting to check until a leaf node is reached, exponential growth is practically guaranteed. If there is any way to eliminate 
-        children (reduce the set of choices), do so!
+        Conversely, by waiting to check until a leaf node is reached, exponential growth is practically guaranteed. <b><i>If there is any way to eliminate 
+        children (reduce the set of choices), do so!</i></b>
     </p>
     </section>
 
@@ -448,12 +451,12 @@
             especially useful when you are trying to debug recursive routines.
         </p>
         <p>
-            Trick #1: Indent when you print method entries and exits. Often, the best debugging technique is to print every method call and return (or at least 
+            <b>Trick #1: Indent when you print method entries and exits.</b> Often, the best debugging technique is to print every method call and return (or at least 
             the most important ones). You probably want to print, for each method, what parameters it came in with, and what value it leaves with. However, if 
             you just print a long list of these, it's hard to match up method exits with their corresponding entries. Indenting to show the level of nesting can help.
         </p>
         <p>
-            Trick #2: Use specialized print methods for debugging. Don't clutter up your actual code more than you must. Also, remember that code inserted for 
+            <b>Trick #2: Use specialized print methods for debugging.</b> Don't clutter up your actual code more than you must. Also, remember that code inserted for 
             debugging purposes can itself contain bugs, or (in the worst case) can affect the results, so be very careful with it.
         </p>
         <p>
@@ -486,13 +489,13 @@
         <p>
             To use this code, we modify solvable as follows:
         </p>
-        <pre><font size="4">    static boolean solvable(BinaryTree node) {
-        enter(node);
-        if (node == null) return no(node);
-        if (node.isGoalNode) return yes(node);
-        if (solvable(node.leftChild)) return yes(node);
-        if (solvable(node.rightChild)) return yes(node);
-        return no(node);
+        <pre><font size="4" color="#601B1B">    static boolean solvable(BinaryTree node) {
+        <b>enter(node);</b>
+        if (node == null) return <b>no(node);</b>
+        if (node.isGoalNode) return <b>yes(node);</b>
+        if (solvable(node.leftChild)) return <b>yes(node);</b>
+        if (solvable(node.rightChild)) return <b>yes(node);</b>
+        return <b>no(node);</b>
     }  
         </font></pre>
         <p>And we get these results:</p>
@@ -520,13 +523,16 @@
     true
             </font></pre>
         </b>
-        <p>Trick #3: Never discard your debugging statements. Writing debugging statements is programming, too. Often it's as much work to debug the 
+        <p>
+            <b>Trick #3: Never discard your debugging statements.</b> Writing debugging statements is programming, too. Often it's as much work to debug the 
             debugging statements as it is to debug the actual program. Once your program is working, why throw this code away?
         </p>
         <p>
             Obviously, you don't want to print out all this debugging information from a program you are ready to submit (or to turn over to your manager). 
             You could comment out your debugging calls, but that can be a lot of work. What's more, in the above example, you would have to replace every
-            return(yes(node)) with return(true), and every return(no(node)) with return false. With all these changes, you might introduce new bugs into your program.
+            <code><font size="5">return(yes(node))</font></code> with <code><font size="5">return(true),</font></code> and every 
+            <code><font size="5">return(no(node))</font></code> with <code><font size="5">return false</font></code>. With all these changes, 
+            you might introduce new bugs into your program.
         </p>
         <p>
             The simple solution is to make your debugging statements conditional. For example,
@@ -557,12 +563,13 @@
     }
     </font></pre>
     <p>In industry, actual programs often have multiple flags to control different aspects of debugging. Don't worry too much about making your code larger; 
-        modern compilers will notice that since the variable debugging is final, it can never be true, and the controlled code will be discarded.
+        modern compilers will notice that since the variable <code><font size="5">debugging</font></code> is <code><font size="5">final</font></code>, 
+        it can never be <code><font size="4">true</font></code>, and the controlled code will be discarded.
     </p>
     <p>
-        Trick #4: Create an Exception. If an Exception is thrown, you can get information about just where it happened by sending it the message 
-        printStackTrace(PrintStream). Since an Exception is an object like any other, you can create and throw your own Exceptions. However, Java programmers 
-        don't always realize that you can create an Exception without throwing it. For example, the following code
+        <b>Trick #4: Create an Exception.</b> If an Exception is thrown, you can get information about just where it happened by sending it the message 
+        <code><font size="5">printStackTrace(PrintStream).</font></code> Since an Exception is an object like any other, you can create and throw your own Exceptions. 
+        However, Java programmers don't always realize that you can create an Exception without throwing it. For example, the following code
     </p>
     <blockquote>
         <pre><font size="4 ">new Exception("Checkpoint Charlie").printStackTrace(System.out);</font></pre>
@@ -767,8 +774,8 @@
         routine will either succeed and print out a winning path, or it will fail, and the main program will have to print out the bad news.
     </p>
     <p>
-        The backtracking method is named solvable and returns a boolean. In solvable we shall need to check whether we are at a leaf, which in this case means 
-        a position from which no further moves are possible. This isn't so easy.
+        The backtracking method is named <code><font size="5">solvable</font></code> and returns a <code><font size="5">boolean</font></code>. In <code><font size="5">solvable</font></code> we 
+        shall need to check whether we are at a leaf, which in this case means a position from which no further moves are possible. This isn't so easy.
     </p>
     <p>
         Each possible move will result in a new board position, and these new board positions are the children of the current board position. Hence to find the 
@@ -792,9 +799,9 @@
         spaces (unlike the marbles) stay in one place.
     </p>
     <p>
-        Now we have a simpler ordering of moves to use in our program. Just check, in order, the 2n+1 spaces of the board. For each space, either zero or one 
-        moves is possible. With this understanding, we can write a boolean method canMove(int[] board, int position) which determines whether a move is possible 
-        from the given position:
+        Now we have a simpler ordering of moves to use in our program. Just check, in order, the <code><font size="5">2n+1</font></code> spaces of the board. For 
+        each space, either zero or one moves is possible. With this understanding, we can write a boolean method <code><font size="5">canMove(int[] board, int position)</font></code> 
+        which determines whether a move is possible from the given position:
     </p>
     <ul>
         <li>
@@ -808,9 +815,9 @@
         </li>
     </ul>
     <p>
-        We write another method int[] makeMove(int[] oldBoard, int position) that will take a board and a position, make a move from that position, and return 
-        as its value a new board. (We could write this somewhat more efficiently by changing the old board, rather than creating a new one, but here we are more 
-        concerned with simplicity.) In technical jargon, makeMove is "applicative" rather than "mutative."
+        We write another <code><font size="5">method int[] makeMove(int[] oldBoard, int position)</font></code> that will take a board and a position, make a move 
+        from that position, and return as its value a new board. (We could write this somewhat more efficiently by changing the old board, rather than creating a 
+        new one, but here we are more concerned with simplicity.) In technical jargon, <code><font size="5">makeMove</font></code> is "applicative" rather than "mutative."
     </p>
     <p>
         With these methods, our central backtracking method can be written as follows:
@@ -832,10 +839,11 @@
     }    
     </font></pre>
     <p>
-        Along with canMove and makeMove, we are using methods puzzleSolved and printBoard with meanings that should be obvious.
+        Along with <code><font size="5">canMove</font></code> and <code><font size="5">makeMove</font></code>, 
+        we are using methods <code><font size="5">puzzleSolved</font></code> and <code><font size="5">printBoard</font></code> with meanings that should be obvious.
     </p>
     <p>Here is some output from the program:</p>
-    <pre><i><font color="#0000ff" SIZE="5">16.</font></i><b><font color="#000000" size="5">WHITE  WHITE  WHITE  _____  BLACK  BLACK  BLACK</font></b>
+    <pre><i><font color="#0000ff" SIZE="5">16.</font></i><font color="#000000" size="5"><b>WHITE  WHITE  WHITE  _____  BLACK  BLACK  BLACK</b></font>
 <i><font color="#0000ff" SIZE="5">15.</font></i><b><font color="#000000" size="5">WHITE  WHITE  WHITE  BLACK  _____  BLACK  BLACK</font></b>
 <i><font color="#0000ff" SIZE="5">14.</font></i><b><font color="#000000" size="5">WHITE  WHITE  _____  BLACK  WHITE  BLACK  BLACK</font></b>
 <i><font color="#0000ff" SIZE="5">13.</font></i><b><font color="#000000" size="5">WHITE  _____  WHITE  BLACK  WHITE  BLACK  BLACK</font></b>
